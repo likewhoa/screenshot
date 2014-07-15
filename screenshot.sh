@@ -46,10 +46,10 @@ imgur() {
       ./imgurbash.sh "$filename"
       ;;
     'Desktop Screenshot')
-      scrot '%Y-%m-%d_$wx$h_gentoo-livedvd-imgur-scrot.png' -e 'mv $f ~/Pictures/ && /usr/local/bin/imgurbash.sh ~/Pictures/$f'
+      scrot '%Y-%m-%d_$wx$h_gentoo-livedvd-imgur-scrot.png' -e 'mv $f ~/Pictures/ && imgurbash.sh ~/Pictures/$f'
       ;;
     'Window Screenshot')
-      scrot '%Y-%m-%d_$wx$h_gentoo-livedvd-imgur-scrot.png' -b -s -e 'mv $f ~/Pictures/ && /usr/local/bin/imgurbash.sh ~/Pictures/$f'
+      scrot '%Y-%m-%d_$wx$h_gentoo-livedvd-imgur-scrot.png' -b -s -e 'mv $f ~/Pictures/ && imgurbash.sh ~/Pictures/$f'
       ;;
     *)
       echo "Error occurred, exiting"
