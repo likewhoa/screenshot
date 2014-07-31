@@ -16,6 +16,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+yesno() {
+  local re='^([Yy]|[Yy][Ee][Ss])'
+
+  if [[ $answer =~ $re ]]; then
+    echo "Exiting script"
+    return 0
+  else
+    echo "Invalid answer, try again"
+    return 1
+  fi
+}
+
+imgur_results() {
+  case $1 in
+    1)
+      read -p 'Type yes to exit this window: ' answer;;
+    *)
+      read -p 'Your imgur urls are above. Type yes to exit this window: ' answer
+  esac
+
+  yesno $answer || imgur_results 1
+}
+
 if [ $(id -u) = 0 ]; then
   echo "This script must not be run as root"
   echo "exiting";exit 1
@@ -30,31 +53,36 @@ fi
 
 [ -d ~/Pictures ] || mkdir ~/Pictures
 
-answer=$(zenity --list --column "" --text "Gentoo Livedvd Screenshot uploader"\
-  --hide-header "Upload an Image" "Desktop Screenshot" "Window Screenshot")
+question=$(zenity --list --column "" --text "Imgur screenshot uploader"\
+  --hide-header "Image upload" "Entire screen" "Select a region")
 
 imgur() {
   local re='(jpg|png)'
 
   case $1 in
-    'Upload an Image')
+    'Image upload')
+      local filename
       filename=$(zenity --file-selection)
-      if [[ ! $re =~ ${filename/#*.} ]]; then
-        zenity --warning --text "Filename '${filename/#*\/} is invalid!\nOnly JPEG, GIF, PNG, APNG, TIFF, BMP, PDF, XCF (GIMP) are supported"
-        exit 1
+
+      if [[ ! ${filename/#*.} =~ $re ]]; then
+        zenity --warning --text "Filename '${filename/#*\/}' is invalid! \n\nOnly JPEG, GIF, PNG, APNG, TIFF, BMP, PDF, XCF (GIMP)\nare supported"
+        return 1
       fi
-      ./imgurbash.sh "$filename"
+
+      imgurbash.sh "$filename"
       ;;
-    'Desktop Screenshot')
-      scrot '%Y-%m-%d_$wx$h_gentoo-livedvd-imgur-scrot.png' -e 'mv $f ~/Pictures/ && imgurbash.sh ~/Pictures/$f'
+    'Entire screen')
+      scrot '%Y-%m-%d_$wx$h-imgur-scrot-src.png' -e 'mv $f ~/Pictures/ && imgurbash.sh ~/Pictures/$f'
       ;;
-    'Window Screenshot')
-      scrot '%Y-%m-%d_$wx$h_gentoo-livedvd-imgur-scrot.png' -b -s -e 'mv $f ~/Pictures/ && imgurbash.sh ~/Pictures/$f'
+    'Select a region')
+      scrot '%Y-%m-%d_$wx$h-imgur-scrot-region.png' -b -s -e 'mv $f ~/Pictures/ && imgurbash.sh ~/Pictures/$f'
       ;;
     *)
       echo "Error occurred, exiting"
       exit 1
   esac
+
+  imgur_results
 }
 
-imgur "$answer"
+imgur "$question"
