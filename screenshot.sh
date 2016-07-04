@@ -31,8 +31,10 @@ yesno() {
 imgur_results() {
   case $1 in
     1)
+      echo -e "\n"
       read -p 'Type yes to exit this window: ' answer;;
     *)
+      echo -e "\n"
       read -p 'Your imgur urls are above. Type yes to exit this window: ' answer
   esac
 
@@ -54,7 +56,7 @@ fi
 [ -d ~/Pictures ] || mkdir ~/Pictures
 
 question=$(zenity --list --column "" --text "Imgur screenshot uploader"\
-  --hide-header "Image upload" "Entire screen" "Select a region")
+  --hide-header "Image upload" "Entire screen" "Select a region" 2>/dev/null)
 
 imgur() {
   local re='(jpg|png)'
