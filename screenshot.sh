@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # screenshot.sh script imgur.com uploader using imgurbash.sh and zenity
-# Copyright (C) 2014 Mission Accomplish, Inc.
+# Copyright (C) 2016 Mission Accomplish, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
